@@ -34,4 +34,32 @@ ProductSchema.virtual("averageRating").get(function () {
   return rating;
 });
 
+// Sync function to Algolia
+ProductSchema.plugin(deepPopulate);
+ProductSchema.plugin(mongooseAlgolia, {
+  appId: "FCW6D3LK4W",
+  apiKey: "8ade48fef80aecbfacfea2b94183c2cc",
+  indexName: "mean",
+  selector:
+    "_id title image reviews description category price owner created averageRating brand",
+  populate: {
+    path: "owner reviews brand category",
+    select: "name rating",
+  },
+  defaults: {
+    author: "unknown",
+  },
+  mappings: {
+    title: function (value) {
+      return `${value}`;
+    },
+  },
+  debug: true,
+});
+let Model = mongoose.model("Product", ProductSchema);
+Model.SyncToAlgolia();
+Model.SetAlgoliaSettings({
+  searchableAttributes: ["title"],
+});
+
 module.exports = Model;
