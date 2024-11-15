@@ -50,5 +50,41 @@ const mainController = {
       }
     );
   },
+  getBrands: (req, res, next) => {
+    brand.find({}, (err, brands) => {
+      res.json({
+        success: true,
+        message: "Success",
+        brands: brands,
+      });
+    });
+  },
+  addBrands: (req, res, next) => {
+    let b = new brand();
+    b.name = req.body.brand;
+    b.save();
+    res.json({
+      success: true,
+      message: "Successful",
+    });
+  },
+  getCategory: (req, res, next) => {
+    category.find({}, (err, categories) => {
+      res.json({
+        success: true,
+        message: "Success",
+        categories: categories,
+      });
+    });
+  },
+  addCategory: (req, res, next) => {
+    let c = new category();
+    c.name = req.body.category;
+    c.save();
+    res.json({
+      success: true,
+      message: "Successful",
+    });
+  },
 };
 module.exports = mainController;
