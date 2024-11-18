@@ -86,5 +86,54 @@ const mainController = {
       message: "Successful",
     });
   },
+  getProductById: (req, res, next) => {
+    Product.findById({ _id: req.params.id })
+      .populate("category")
+      .populate("owner")
+      .populate("brand")
+      .deepPopulate("reviews.owner")
+      .exec((err, product) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: "Product is not found",
+          });
+        } else {
+          if (product) {
+            res.json({
+              success: true,
+              product: product,
+            });
+          }
+        }
+      });
+  },
+  createReview: (req, res, next) => {
+    async.waterfall([
+      function (callback) {
+        Product.findOne({ _id: req.body.productId }, (err, product) => {
+          if (product) {
+            callback(err, product);
+          }
+        });
+      },
+      function (product) {
+        let review = new Review();
+        review.owner = req.decoded.user._id;
+
+        if (req.body.title) review.title = req.body.title;
+        if (req.body.description) review.description = req.body.description;
+        review.rating = req.body.rating;
+
+        product.reviews.push(review._id);
+        product.save();
+        review.save();
+        res.json({
+          success: true,
+          message: "Successfully added the review",
+        });
+      },
+    ]);
+  },
 };
 module.exports = mainController;
