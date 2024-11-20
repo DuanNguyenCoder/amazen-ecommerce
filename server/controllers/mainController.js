@@ -135,5 +135,60 @@ const mainController = {
       },
     ]);
   },
+
+  createPayment: async (req, res, next) => {
+    dataProductSave = req.body.products;
+    dataProductSave["totalPrice"] = req.body.totalPrice;
+    dataPayFormat = [];
+    for (product of req.body.products) {
+      const productFind = await Product.findOne({ _id: product.id });
+
+      const formatProductStripe = {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: productFind.title,
+          },
+          unit_amount: Math.round(productFind.price * 100),
+        },
+        quantity: product.quantity,
+      };
+      dataPayFormat.push(formatProductStripe);
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: dataPayFormat,
+      mode: "payment",
+      success_url: `${process.env.clientUrl}payment?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: "http://localhost:4200/cancel",
+    });
+
+    res.json({ url: session.url });
+  },
+  verifyPay: async (req, res) => {
+    const session = await stripe.checkout.sessions.retrieve(req.body.sessionId);
+
+    if (session.payment_status === "paid") {
+      console.log(dataProductSave);
+      let order = new Order();
+      order.owner = req.decoded.user._id;
+      order.totalPrice = dataProductSave.totalPrice;
+
+      dataProductSave.map((product) => {
+        order.products.push({
+          product: product.id,
+          quantity: product.quantity,
+        });
+      });
+      order.save();
+
+      res.json({ success: true, message: "Payment verified and saved." });
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: "Payment not completed." });
+    }
+  },
 };
 module.exports = mainController;
