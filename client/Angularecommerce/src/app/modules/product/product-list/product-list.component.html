@@ -1,0 +1,40 @@
+<div class="grid grid-cols-4 h-full gap-4">
+  <!-- Product Card -->
+  <div
+    *ngFor="let product of products"
+    class="bg-white min-h-[430px] max-h-[430px] p-4 shadow rounded"
+  >
+    <a routerLink="/product/{{ product._id }}">
+      <img
+        [src]="
+          product.image
+            ? product.image
+            : '../../../assets/img/product_placeholder.png'
+        "
+        alt="Product Image"
+        class="mb-2 max-h-[217px] object-contain min-w-[217px]"
+      />
+    </a>
+    <h2 class="text-sm font-bold multi-line-truncate">
+      {{ product.title }}
+    </h2>
+
+    <p class="font-bold text-lg">{{ product.price | currency }}</p>
+    <p class="text-sm">
+      Delivery <strong>Tue, Mar 4 {{ dataSer.deliveryDate }}</strong>
+    </p>
+    <button
+      (click)="addToCart(product)"
+      class="mt-2 bg-yellow-500 text-white py-1 px-3 rounded"
+    >
+      Add to cart
+    </button>
+  </div>
+</div>
+<ngb-pagination
+  class="flex justify-end"
+  [collectionSize]="totalProduct"
+  [pageSize]="5"
+  [(page)]="page"
+  (pageChange)="getProductsByPage(page - 1)"
+></ngb-pagination>

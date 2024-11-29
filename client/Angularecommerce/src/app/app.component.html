@@ -1,0 +1,86 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="flex items-center">
+    <a routerLink="/">
+      <img src="./assets/img/logo.png" alt="logo" id="logo" />
+    </a>
+    <span class="logo">amazon</span>
+  </div>
+  <!--  -->
+  <div class="input-group w-75">
+    <input
+      placeholder="Search..."
+      type="text"
+      name="search"
+      class="form-control"
+      [(ngModel)]="searchTerm"
+    />
+    <span id="searchBtn" class="bg-warning" (click)="search()">
+      <i class="fa fa-search"></i>
+    </span>
+  </div>
+  <!--  -->
+  <span
+    class="text-sm account hover:cursor-pointer"
+    *ngIf="!token"
+    [matMenuTriggerFor]="accountMenu"
+    >Accounts</span
+  >
+  <span
+    *ngIf="data.user"
+    class="account hover:cursor-pointer text-sm"
+    [matMenuTriggerFor]="accountMenu"
+    ><i class="fa fa-user mr-1"></i>Hello, {{ data.user.name }}</span
+  >
+  <mat-menu #accountMenu="matMenu">
+    <a routerLink="/profile"
+      ><button *ngIf="token" mat-menu-item>
+        <mat-icon>👤</mat-icon>user
+      </button></a
+    >
+    <a routerLink="/login" (click)="logout()"
+      ><button *ngIf="token" mat-menu-item>
+        <mat-icon> <i class="fa fa-key" aria-hidden="true"></i></mat-icon>Sign
+        Out
+      </button></a
+    >
+    <a routerLink="/login"
+      ><button *ngIf="!token" mat-menu-item>
+        <mat-icon> <i class="fa fa-key" aria-hidden="true"></i></mat-icon>Login
+      </button></a
+    >
+    <a routerLink="/manage"
+      ><button *ngIf="token && data.user.email == 'admin'" mat-menu-item>
+        <mat-icon> 📝</mat-icon>manage
+      </button></a
+    >
+    <a routerLink="/register"
+      ><button *ngIf="!token" mat-menu-item>
+        <mat-icon> <i class="fa fa-group" aria-hidden="true"></i></mat-icon
+        >Registry
+      </button></a
+    >
+  </mat-menu>
+
+  <a class="!mb-1" routerLink="/cart">
+    <button mat-icon-button>
+      <mat-icon [matBadge]="cartSer.cartItems">shopping_cart</mat-icon>
+    </button>
+  </a>
+</mat-toolbar>
+
+<mat-toolbar color="accent" class="sub-navbar">
+  <button mat-button><mat-icon>menu</mat-icon> All</button>
+  <button mat-button>Today's Deals</button>
+  <button mat-button>Customer Service</button>
+  <button mat-button>Registry</button>
+  <button mat-button>Gift Cards</button>
+  <button mat-button>Sell</button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
+
+<footer id="main-footer" class="bg-main text-white mt-5 p-5">
+  <div class="container">
+    <p class="lead text-center">Copyright &copy; 2018 ECommerce</p>
+  </div>
+</footer>

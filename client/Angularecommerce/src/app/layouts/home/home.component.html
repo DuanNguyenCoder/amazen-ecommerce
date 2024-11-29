@@ -1,0 +1,69 @@
+<section id="home">
+  <div
+    id="myCarousel"
+    class="carousel slide"
+    data-ride="carousel"
+    data-interval="1000"
+  >
+    <ngb-carousel>
+      <ng-template ngbSlide>
+        <img src="assets/img/image1.jpg" alt="first" class="item" />
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image2.jpg" alt="second" class="item" />
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image3.jpg" alt="third" class="item" />
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image4.jpg" alt="fourth" class="item" />
+      </ng-template>
+      <ng-template ngbSlide>
+        <img src="assets/img/image5.jpg" alt="fifth" class="item" />
+      </ng-template>
+    </ngb-carousel>
+  </div>
+  <div class="card flex justify-center"></div>
+  <div class="bg-gray-100 h-[1200px] p-6">
+    <app-message></app-message>
+    <div class="container min-h-[950px] mx-auto flex">
+      <!-- Sidebar -->
+      <aside class="w-1/4 bg-white p-4 shadow rounded">
+        <h2 class="font-bold text-lg mb-4">Department</h2>
+        <p>Price</p>
+        <p>${{ price }}</p>
+
+        <mat-slider min="0" max="1000" step="10" [(ngModel)]="price">
+          <input matSliderThumb />
+        </mat-slider>
+        <span
+          ><button
+            (click)="filterPrice()"
+            class="border border-blue-800 text-blue-400 py-1 px-2 mx-4 rounded-full"
+          >
+            Go
+          </button></span
+        >
+        <h2 class="font-bold text-lg mt-4">Category</h2>
+        <ul class="text-sm text-gray-700">
+          <li *ngFor="let cate of categorys">
+            <input (change)="filterCate($event, cate)" type="checkbox" />
+            {{ cate.name }}
+          </li>
+        </ul>
+        <h2 class="font-bold text-lg mt-4">Brands</h2>
+        <ul class="text-sm text-gray-700">
+          <li *ngFor="let brand of brands">
+            <input (change)="filterBrand($event, brand)" type="checkbox" />
+            {{ brand.name }}
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Product List && search product list -->
+      <main class="w-3/4 ml-6">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</section>

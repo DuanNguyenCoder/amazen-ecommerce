@@ -1,0 +1,71 @@
+<section id="search" class="h-full">
+  <div class="h-full">
+    <app-message></app-message>
+    <h1 class="text-2xl font-bold mb-4">Results</h1>
+    <div *ngIf="isLoading" class="m-auto">
+      <h1 class="text-center display-3 mt-5">
+        <i class="fa fa-spinner fa-spin"></i>
+      </h1>
+    </div>
+    <h3
+      *ngIf="!isLoading && content && !content.nbHits"
+      class="display-2 text-center mt-5"
+    >
+      No Results
+    </h3>
+    <div class="flex h-full flex-col gap-5" *ngIf="content && content.nbHits">
+      <p>
+        {{ lower }}-{{ upper }} of {{ content.nbHits }} results for
+        <span class="text-warning">"{{ query }}"</span>
+      </p>
+      <hr />
+
+      <div [hidden]="isLoading" class="grid h-full grid-cols-4 gap-4">
+        <!-- Product Card -->
+        <div
+          *ngFor="let product of content.hits"
+          class="bg-white min-h-[430px] max-h-[430px] p-4 shadow rounded"
+        >
+          <a routerLink="/product/{{ product.objectID }}">
+            <img
+              [src]="
+                product.image
+                  ? product.image
+                  : '../../../assets/img/product_placeholder.png'
+              "
+              alt="Product Image"
+              class="mb-2 max-h-[217px] object-contain min-w-[217px]"
+            />
+          </a>
+          <h2 class="text-sm font-bold">{{ product.title }}</h2>
+
+          <p class="font-bold text-lg">{{ product.price | currency }}</p>
+          <p class="text-sm">
+            Delivery <strong>Tue, Mar 4 {{ data.deliveryDate }}</strong>
+          </p>
+          <button
+            (click)="addToCart(product)"
+            class="mt-2 bg-yellow-500 text-white py-1 px-3 rounded"
+          >
+            Add to cart
+          </button>
+        </div>
+      </div>
+      <ngb-pagination
+        class="flex justify-end"
+        [collectionSize]="content.nbHits"
+        [pageSize]="10"
+        [page]="page + 1"
+        (pageChange)="getProductsByPage()"
+      ></ngb-pagination>
+    </div>
+  </div>
+</section>
+
+<ng-template #t let-fill="fill">
+  <span *ngIf="fill === 100" class="star full">&#9733;</span>
+  <span *ngIf="fill === 0" class="star">&#9733;</span>
+  <span *ngIf="fill < 100 && fill > 0" class="star">
+    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+  </span>
+</ng-template>
