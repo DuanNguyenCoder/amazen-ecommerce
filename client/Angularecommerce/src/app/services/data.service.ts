@@ -53,4 +53,25 @@ export class DataService {
   postRegistry(dataRegistry: object) {
     return this.rest.post(`${environment.apiURL}accounts/signup`, dataRegistry);
   }
+
+  // review
+  postReview(dataReview: object) {
+    return this.rest.post(`${environment.apiURL}review`, dataReview);
+  }
+
+  // category
+  getCategory() {
+    return this.rest.get(environment.apiURL + "categories");
+  }
+  postCategory(dataCategory: object) {
+    return this.rest.post(`${environment.apiURL}categories`, dataCategory);
+  }
+
+  // brand
+  getBrand() {
+    return this.rest.get(environment.apiURL + "brands");
+  }
+  postBrand(dataBrand: object) {
+    return this.rest.post(`${environment.apiURL}brands`, dataBrand);
+  }
 }
