@@ -74,4 +74,42 @@ export class DataService {
   postBrand(dataBrand: object) {
     return this.rest.post(`${environment.apiURL}brands`, dataBrand);
   }
+  // payment
+  checkPayment(sessionId: number) {
+    return this.rest.post(`${environment.apiURL}verify-payment`, {
+      sessionId,
+    });
+  }
+
+  // user
+  getProductOrder(orderId: number) {
+    return this.rest.get(`${environment.apiURL}accounts/orders/${orderId}`);
+  }
+  getOrder() {
+    return this.rest.get(`${environment.apiURL}accounts/orders`);
+  }
+  getProductSold() {
+    return this.rest.get(`${environment.apiURL}seller/products`);
+  }
+  getAddress() {
+    return this.rest.get(`${environment.apiURL}accounts/address`);
+  }
+  postAddress(dataAddress: object) {
+    return this.rest.post(`${environment.apiURL}accounts/address`, dataAddress);
+  }
+  updateProfile(dataUser: Object) {
+    return this.rest.post(`${environment.apiURL}accounts/profile`, dataUser);
+  }
+  async getProfile() {
+    try {
+      if (localStorage.getItem("token")) {
+        const data: any = await this.rest.get(
+          `${environment.apiURL}accounts/profile`
+        );
+        this.user = data["user"];
+      }
+    } catch (e) {
+      this.showToast(toastType.DANGER, "error");
+    }
+  }
 }
