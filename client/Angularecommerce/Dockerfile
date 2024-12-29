@@ -1,6 +1,7 @@
 # Stage 1: Build the Angular application
 FROM node:14 AS build
 
+# Set the working directory
 WORKDIR /app
 
 # Install dependencies
