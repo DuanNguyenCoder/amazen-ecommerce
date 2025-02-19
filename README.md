@@ -69,5 +69,5 @@ After launching the project, it will automatically create some fake data from th
 
 ```bash
 Email: admin
-Passwords: admi
+Passwords: admin
 ```
